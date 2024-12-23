@@ -1,11 +1,12 @@
 package main
 
 import (
-	"context"
-
 	"github.com/iammuho/certus/cmd/app/config"
-	"github.com/iammuho/certus/pkg/aws"
+	"github.com/iammuho/certus/cmd/app/context"
+	"github.com/iammuho/certus/internal/hub"
 	"github.com/iammuho/certus/pkg/logger"
+
+	_ "github.com/iammuho/certus/internal/drivers/aws"
 )
 
 func main() {
@@ -18,28 +19,12 @@ func main() {
 		panic(err)
 	}
 
-	// AWS
-	aws, err := aws.NewClient(
-		aws.WithAWSRegion(config.Config.AWS.Region),
-		aws.WithAWSAccessKeyID(config.Config.AWS.AccessKeyID),
-		aws.WithAWSSecretAccessKey(config.Config.AWS.SecretAccessKey),
-	)
+	// Create context
+	ctx := context.NewAppContext(l)
 
-	if err != nil {
-		panic(err)
-	}
+	// Initialize the hub system
+	h := hub.NewHub(ctx)
 
-	// S3
-	s3Client := aws.GetS3Client()
-
-	// S3 Bucket
-	buckets, err := s3Client.ListBuckets(context.Background(), nil)
-
-	if err != nil {
-		panic(err)
-	}
-
-	for _, bucket := range buckets.Buckets {
-		l.Info(*bucket.Name)
-	}
+	// Execute all drivers
+	h.ExecuteDrivers()
 }
