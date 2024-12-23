@@ -14,16 +14,6 @@ func init() {
 	hub.Register("aws", &AWSDriver{})
 }
 
-func (l *AWSDriver) Activate() error {
-	l.isActive = true
-	return nil
-}
-
-func (l *AWSDriver) Deactivate() error {
-	l.isActive = false
-	return nil
-}
-
 func (l *AWSDriver) Execute(ctx context.AppContext) {
-	ctx.GetLogger().Info("I'm the AWS driver")
+	ctx.GetLogger().Info("Executing AWS driver")
 }

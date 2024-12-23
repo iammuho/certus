@@ -15,8 +15,6 @@ var (
 
 // Driver is the interface that all drivers must implement.
 type Driver interface {
-	Activate() error
-	Deactivate() error
 	Execute(ctx context.AppContext)
 }
 
