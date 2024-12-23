@@ -46,8 +46,7 @@ func NewHub(ctx context.AppContext) *hub {
 
 // ExecuteDrivers executes all registered drivers.
 func (h *hub) ExecuteDrivers() {
-	for name, driver := range h.drivers {
-		h.ctx.GetLogger().Info("Executing driver", zap.String("driver", name))
+	for _, driver := range h.drivers {
 		driver.Execute(h.ctx)
 	}
 }
