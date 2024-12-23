@@ -8,6 +8,10 @@ import (
 func init() {
 	Config = &config{}
 
+	if err := env.Parse(&Config.Application); err != nil {
+		panic(err)
+	}
+
 	if err := env.Parse(&Config.AWS); err != nil {
 		panic(err)
 	}
